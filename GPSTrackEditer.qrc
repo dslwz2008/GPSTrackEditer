@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/GenericOpen_B_32.png</file>
+  </qresource>
+</RCC>
