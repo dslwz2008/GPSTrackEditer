@@ -52,29 +52,17 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         # set up map canvas layer set
         self.canvas.setLayerSet([ QgsMapCanvasLayer(basemap_layer) ])
 
-        actionZoomIn = QAction(QString("放大"), self)
-        actionZoomIn.setCheckable(True)
-        actionZoomOut = QAction(QString("缩小"), self)
-        actionZoomOut.setCheckable(True)
-        actionPan = QAction(QString("漫游"), self)
-        actionPan.setCheckable(True)
-
-        self.connect(actionZoomIn, SIGNAL("triggered()"), self.zoom_in)
-        self.connect(actionZoomOut, SIGNAL("triggered（）"), self.zoom_out)
-        self.connect(actionPan, SIGNAL("triggered()"), self.pan)
-
-        #create toolbar
-        self.toolBar.addAction(actionZoomIn)
-        self.toolBar.addAction(actionZoomOut)
-        self.toolBar.addAction(actionPan)
+        self.connect(self.action_ZoonIn, SIGNAL("triggered()"), self.zoom_in)
+        self.connect(self.action_ZoomOut, SIGNAL("triggered()"), self.zoom_out)
+        self.connect(self.action_Pan, SIGNAL("triggered()"), self.pan)
 
         #create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
-        self.toolPan.setAction(actionPan)
+        self.toolPan.setAction(self.action_Pan)
         self.toolZoomIn = QgsMapToolZoom(self.canvas, False)
-        self.toolZoomIn.setAction(actionZoomIn)
+        self.toolZoomIn.setAction(self.action_ZoonIn)
         self.toolZoomOut = QgsMapToolZoom(self.canvas, True)
-        self.toolZoomOut.setAction(actionZoomOut)
+        self.toolZoomOut.setAction(self.action_ZoomOut)
 
         self.pan()
 
