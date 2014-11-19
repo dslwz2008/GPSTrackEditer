@@ -49,7 +49,7 @@
    <addaction name="action_tbOpenGPXFile"/>
    <addaction name="separator"/>
    <addaction name="action_Pan"/>
-   <addaction name="action_ZoonIn"/>
+   <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
   </widget>
   <action name="action_OpenGPXFile">
@@ -80,7 +80,7 @@
     <string>点击打开GPX文件</string>
    </property>
   </action>
-  <action name="action_ZoonIn">
+  <action name="action_ZoomIn">
    <property name="icon">
     <iconset resource="GPSTrackEditer.qrc">
      <normaloff>:/icons/icons/ZoomInTool_B_32.png</normaloff>:/icons/icons/ZoomInTool_B_32.png</iconset>
