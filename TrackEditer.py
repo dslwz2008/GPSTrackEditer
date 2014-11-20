@@ -41,20 +41,24 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         basemap_name = os.getcwd() + "/data/35school.tif"
         fileinfo = QFileInfo(basemap_name)
         baseName = fileinfo.baseName()
-        basemap_layer = QgsRasterLayer(basemap_name, baseName)
-        if not basemap_layer.isValid():
+        self.basemap_layer = QgsRasterLayer(basemap_name, baseName)
+        if not self.basemap_layer.isValid():
             QMessageBox.information(None, _fromUtf8("错误"), _fromUtf8("打开底图失败！"))
             return
 
         #add layer
-        QgsMapLayerRegistry.instance().addMapLayer(basemap_layer)
-        self.canvas.setExtent(basemap_layer.extent())
+        QgsMapLayerRegistry.instance().addMapLayer(self.basemap_layer)
+        self.canvas.setExtent(self.basemap_layer.extent())
         # set up map canvas layer set
-        self.canvas.setLayerSet([ QgsMapCanvasLayer(basemap_layer) ])
+        self.canvas.setLayerSet([ QgsMapCanvasLayer(self.basemap_layer) ])
+        self.track_layer = None
 
         self.connect(self.action_ZoonIn, SIGNAL("triggered()"), self.zoom_in)
         self.connect(self.action_ZoomOut, SIGNAL("triggered()"), self.zoom_out)
         self.connect(self.action_Pan, SIGNAL("triggered()"), self.pan)
+        self.connect(self.action_OpenGPXFile, SIGNAL("triggered()"), self.open_gpx_file)
+        self.connect(self.action_tbOpenGPXFile, SIGNAL("triggered()"), self.open_gpx_file)
+        self.connect(self.action_Exit, SIGNAL("triggered()"), self.exit)
 
         #create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
@@ -65,6 +69,38 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.toolZoomOut.setAction(self.action_ZoomOut)
 
         self.pan()
+
+    def open_gpx_file(self):
+        filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
+                                    _fromUtf8("GPS文件(*.gpx);;Shapefile(*.shp)"))
+        if filename is None:
+            return
+
+        #has already load track layer, delete first
+        if self.track_layer is not None:
+            trklyr_name = self.track_layer.name()
+            for name in QgsMapLayerRegistry.instance().mapLayers():
+                if name.indexOf(trklyr_name) != -1:#found
+                    QgsMapLayerRegistry.instance().removeMapLayer(name)
+                    self.track_layer = None
+                    break
+            print(QgsMapLayerRegistry.instance().count())
+
+        # load shapefile
+        fileinfo = QFileInfo(filename)
+        baseName = fileinfo.baseName()
+        self.track_layer = QgsVectorLayer(filename, baseName, "ogr")
+        if not self.track_layer.isValid():
+            return
+        QgsMapLayerRegistry.instance().addMapLayer(self.track_layer)
+        self.canvas.setExtent(self.track_layer.extent())
+        maps = QgsMapLayerRegistry.instance().mapLayers()
+        #print(maps)
+        self.canvas.setLayerSet([QgsMapCanvasLayer(maps[n]) for n in maps])
+        print(QgsMapLayerRegistry.instance().count())
+
+    def exit(self):
+        self.close()
 
     def zoom_in(self):
         self.canvas.setMapTool(self.toolZoomIn)
