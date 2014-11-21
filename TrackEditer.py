@@ -7,6 +7,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
+from CustomMapTools import *
 import os
 import sys
 
@@ -16,10 +17,6 @@ try:
     _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-
-
-#global variables
-
 
 
 class TrackEditer(QMainWindow, Ui_MainWindow):
@@ -50,23 +47,30 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         QgsMapLayerRegistry.instance().addMapLayer(self.basemap_layer)
         self.canvas.setExtent(self.basemap_layer.extent())
         # set up map canvas layer set
-        self.canvas.setLayerSet([ QgsMapCanvasLayer(self.basemap_layer) ])
+        self.layer_set = [ QgsMapCanvasLayer(self.basemap_layer) ]
+        self.canvas.setLayerSet(self.layer_set)
         self.track_layer = None
 
-        self.connect(self.action_ZoonIn, SIGNAL("triggered()"), self.zoom_in)
+        self.connect(self.action_ZoomIn, SIGNAL("triggered()"), self.zoom_in)
         self.connect(self.action_ZoomOut, SIGNAL("triggered()"), self.zoom_out)
         self.connect(self.action_Pan, SIGNAL("triggered()"), self.pan)
         self.connect(self.action_OpenGPXFile, SIGNAL("triggered()"), self.open_gpx_file)
         self.connect(self.action_tbOpenGPXFile, SIGNAL("triggered()"), self.open_gpx_file)
         self.connect(self.action_Exit, SIGNAL("triggered()"), self.exit)
+        self.connect(self.action_SelectByRect, SIGNAL("triggered()"), self.select_by_rect)
+        self.connect(self.action_MoveVertex, SIGNAL("triggered()"), self.move_vertex)
 
         #create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
         self.toolPan.setAction(self.action_Pan)
         self.toolZoomIn = QgsMapToolZoom(self.canvas, False)
-        self.toolZoomIn.setAction(self.action_ZoonIn)
+        self.toolZoomIn.setAction(self.action_ZoomIn)
         self.toolZoomOut = QgsMapToolZoom(self.canvas, True)
         self.toolZoomOut.setAction(self.action_ZoomOut)
+        self.toolRectSelection = RectSelectionMapTool(self.canvas, self.track_layer)
+        self.toolRectSelection.setAction(self.action_SelectByRect)
+        self.toolMoveVertex = MoveVertexMapTool(self.canvas)
+        self.toolMoveVertex.setAction(self.action_MoveVertex)
 
         self.pan()
 
@@ -81,7 +85,10 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
             trklyr_name = self.track_layer.name()
             for name in QgsMapLayerRegistry.instance().mapLayers():
                 if name.indexOf(trklyr_name) != -1:#found
+                    # remove from manager
                     QgsMapLayerRegistry.instance().removeMapLayer(name)
+                    # remove from local layer set
+                    self.layer_set.remove(self.layer_set[0])
                     self.track_layer = None
                     break
             print(QgsMapLayerRegistry.instance().count())
@@ -93,11 +100,14 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         if not self.track_layer.isValid():
             return
         QgsMapLayerRegistry.instance().addMapLayer(self.track_layer)
+        self.layer_set.insert(0, QgsMapCanvasLayer(self.track_layer))
+        self.canvas.setLayerSet(self.layer_set)
         self.canvas.setExtent(self.track_layer.extent())
-        maps = QgsMapLayerRegistry.instance().mapLayers()
+        self.toolRectSelection.setSelectLayer(self.track_layer)
+        #maps = QgsMapLayerRegistry.instance().mapLayers()
         #print(maps)
-        self.canvas.setLayerSet([QgsMapCanvasLayer(maps[n]) for n in maps])
         print(QgsMapLayerRegistry.instance().count())
+        print(self.track_layer.dataProvider().capabilitiesString())
 
     def exit(self):
         self.close()
@@ -110,6 +120,18 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
     def pan(self):
         self.canvas.setMapTool(self.toolPan)
+
+    def select_by_rect(self):
+        self.canvas.setMapTool(self.toolRectSelection)
+
+    def move_vertex(self):
+        if self.track_layer is None or \
+            self.track_layer.selectedFeatureCount() == 0:
+            QMessageBox.information(self, _fromUtf8("注意"), _fromUtf8("请先选择矢量要素！"))
+            return
+        self.canvas.setMapTool(self.toolMoveVertex)
+        self.toolMoveVertex.setEditLayer(self.track_layer)
+
 
 
 def main(argv):
