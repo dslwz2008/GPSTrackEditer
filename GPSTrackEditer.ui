@@ -33,7 +33,16 @@
     <addaction name="separator"/>
     <addaction name="action_Exit"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -53,8 +62,7 @@
    <addaction name="action_ZoomOut"/>
    <addaction name="separator"/>
    <addaction name="action_SelectByRect"/>
-   <addaction name="action_StartEditing"/>
-   <addaction name="action_Save"/>
+   <addaction name="action_MoveVertex"/>
   </widget>
   <action name="action_OpenGPXFile">
    <property name="icon">
@@ -127,7 +135,7 @@
     <string>漫游</string>
    </property>
   </action>
-  <action name="action_StartEditing">
+  <action name="action_MoveVertex">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -158,6 +166,16 @@
    </property>
    <property name="text">
     <string>选择</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>文档</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>关于</string>
    </property>
   </action>
  </widget>
