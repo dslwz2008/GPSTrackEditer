@@ -51,6 +51,9 @@
    <addaction name="action_Pan"/>
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
+   <addaction name="separator"/>
+   <addaction name="action_StartEditing"/>
+   <addaction name="action_Save"/>
   </widget>
   <action name="action_OpenGPXFile">
    <property name="icon">
@@ -63,6 +66,11 @@
    </property>
   </action>
   <action name="action_Exit">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/icons/GenericDeleteBlack32.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>退出</string>
    </property>
@@ -116,6 +124,29 @@
    </property>
    <property name="toolTip">
     <string>漫游</string>
+   </property>
+  </action>
+  <action name="action_StartEditing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/icons/EditingEditLine32.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>开始编辑</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/icons/EditingSaveEdits_B_32.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>保存编辑</string>
    </property>
   </action>
  </widget>

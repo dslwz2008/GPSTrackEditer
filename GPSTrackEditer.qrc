@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/GenericDeleteBlack32.png</file>
+    <file>icons/EditingEditLine32.png</file>
+    <file>icons/EditingSaveEdits_B_32.png</file>
     <file>icons/ZoomOutTool_B_32.png</file>
     <file>icons/PanTool_B_32.png</file>
     <file>icons/ZoomInTool_B_32.png</file>
