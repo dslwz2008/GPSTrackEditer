@@ -52,6 +52,7 @@
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
    <addaction name="separator"/>
+   <addaction name="action_SelectByRect"/>
    <addaction name="action_StartEditing"/>
    <addaction name="action_Save"/>
   </widget>
@@ -147,6 +148,16 @@
    </property>
    <property name="text">
     <string>保存编辑</string>
+   </property>
+  </action>
+  <action name="action_SelectByRect">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/icons/SelectionSelectTool32.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>选择</string>
    </property>
   </action>
  </widget>
