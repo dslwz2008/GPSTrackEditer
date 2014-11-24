@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'GPSTrackEditer.ui'
 #
-# Created: Fri Nov 21 18:05:16 2014
+# Created: Mon Nov 24 15:44:12 2014
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -66,16 +66,16 @@ class Ui_MainWindow(object):
         self.action_Pan.setIcon(icon4)
         self.action_Pan.setObjectName(_fromUtf8("action_Pan"))
         self.action_MoveVertex = QtGui.QAction(MainWindow)
-        self.action_MoveVertex.setCheckable(True)
+        self.action_MoveVertex.setCheckable(False)
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/EditingEditLine32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.action_MoveVertex.setIcon(icon5)
         self.action_MoveVertex.setObjectName(_fromUtf8("action_MoveVertex"))
-        self.action_Save = QtGui.QAction(MainWindow)
+        self.action_tbSaveGPSTrack = QtGui.QAction(MainWindow)
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/EditingSaveEdits_B_32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.action_Save.setIcon(icon6)
-        self.action_Save.setObjectName(_fromUtf8("action_Save"))
+        icon6.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/GenericSave_B_32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.action_tbSaveGPSTrack.setIcon(icon6)
+        self.action_tbSaveGPSTrack.setObjectName(_fromUtf8("action_tbSaveGPSTrack"))
         self.action_SelectByRect = QtGui.QAction(MainWindow)
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/SelectionSelectTool32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -85,7 +85,11 @@ class Ui_MainWindow(object):
         self.action.setObjectName(_fromUtf8("action"))
         self.action_3 = QtGui.QAction(MainWindow)
         self.action_3.setObjectName(_fromUtf8("action_3"))
+        self.action_SaveGPSTrack = QtGui.QAction(MainWindow)
+        self.action_SaveGPSTrack.setIcon(icon6)
+        self.action_SaveGPSTrack.setObjectName(_fromUtf8("action_SaveGPSTrack"))
         self.menu.addAction(self.action_OpenGPXFile)
+        self.menu.addAction(self.action_SaveGPSTrack)
         self.menu.addSeparator()
         self.menu.addAction(self.action_Exit)
         self.menu_2.addAction(self.action)
@@ -101,6 +105,7 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.action_SelectByRect)
         self.toolBar.addAction(self.action_MoveVertex)
+        self.toolBar.addAction(self.action_tbSaveGPSTrack)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -121,9 +126,10 @@ class Ui_MainWindow(object):
         self.action_Pan.setText(QtGui.QApplication.translate("MainWindow", "漫游", None, QtGui.QApplication.UnicodeUTF8))
         self.action_Pan.setToolTip(QtGui.QApplication.translate("MainWindow", "漫游", None, QtGui.QApplication.UnicodeUTF8))
         self.action_MoveVertex.setText(QtGui.QApplication.translate("MainWindow", "开始编辑", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_Save.setText(QtGui.QApplication.translate("MainWindow", "保存编辑", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_tbSaveGPSTrack.setText(QtGui.QApplication.translate("MainWindow", "保存编辑", None, QtGui.QApplication.UnicodeUTF8))
         self.action_SelectByRect.setText(QtGui.QApplication.translate("MainWindow", "选择", None, QtGui.QApplication.UnicodeUTF8))
         self.action.setText(QtGui.QApplication.translate("MainWindow", "文档", None, QtGui.QApplication.UnicodeUTF8))
         self.action_3.setText(QtGui.QApplication.translate("MainWindow", "关于", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_SaveGPSTrack.setText(QtGui.QApplication.translate("MainWindow", "保存GPS轨迹", None, QtGui.QApplication.UnicodeUTF8))
 
 import GPSTrackEditer_rc

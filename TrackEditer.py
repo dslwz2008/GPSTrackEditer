@@ -59,6 +59,8 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.connect(self.action_Exit, SIGNAL("triggered()"), self.exit)
         self.connect(self.action_SelectByRect, SIGNAL("triggered()"), self.select_by_rect)
         self.connect(self.action_MoveVertex, SIGNAL("triggered()"), self.move_vertex)
+        self.connect(self.action_SaveGPSTrack, SIGNAL("triggered()"), self.save_gps_file)
+        self.connect(self.action_tbSaveGPSTrack, SIGNAL("triggered()"), self.save_gps_file)
 
         #create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
@@ -79,6 +81,8 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
                                     _fromUtf8("GPS文件(*.gpx);;Shapefile(*.shp)"))
         if filename is None:
             return
+
+        # convert gpx to shapefile
 
         #has already load track layer, delete first
         if self.track_layer is not None:
@@ -132,6 +136,12 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.canvas.setMapTool(self.toolMoveVertex)
         self.toolMoveVertex.setEditLayer(self.track_layer)
 
+    def save_gps_file(self):
+        # filename = QFileDialog.getSaveFileName(self, _fromUtf8("请保存gpx文件"), "./data",
+        #                             _fromUtf8("GPS文件(*.gpx)"))
+        # if filename is None:
+        #     return
+        pass
 
 
 def main(argv):
