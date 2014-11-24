@@ -13,15 +13,30 @@ class MoveVertexMapTool(QgsMapTool):
         self.canvas = canvas
         QgsMapTool.__init__(self, self.canvas)
         self.edit_layer = None
+        self.isPressing = False
 
     def canvasPressEvent(self, e):
-        pass
+        self.startPoint = self.toMapCoordinates(e.pos())
+        self.endPoint = self.startPoint
+        self.isPressing = True
+        # for f in self.edit_layer.selectedFeatures():
+        #     print(f.id(),f.geometry().asPoint().toString())
 
     def canvasReleaseEvent(self, e):
-        pass
+        self.isPressing = False
+        self.endPoint = self.toMapCoordinates(e.pos())
+        offsetx = self.endPoint.x() - self.startPoint.x()
+        offsety = self.endPoint.y() - self.startPoint.y()
+        for f in self.edit_layer.selectedFeatures():
+            pnt = f.geometry().asPoint()
+            new_pnt = QgsPoint(pnt.x() + offsetx, pnt.y() + offsety)
+            self.edit_layer.dataProvider().changeGeometryValues(
+                {f.id() : QgsGeometry.fromPoint(new_pnt)})
+        self.canvas.refresh()
 
     def canvasMoveEvent(self, e):
-        pass
+        if not self.isPressing:
+            return
 
     def setEditLayer(self, layer):
         self.edit_layer = layer
