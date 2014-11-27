@@ -30,7 +30,6 @@
      <string>文件</string>
     </property>
     <addaction name="action_OpenGPXFile"/>
-    <addaction name="action_SaveGPSTrack"/>
     <addaction name="separator"/>
     <addaction name="action_Exit"/>
    </widget>
@@ -58,13 +57,13 @@
    </attribute>
    <addaction name="action_tbOpenGPXFile"/>
    <addaction name="separator"/>
+   <addaction name="action_Home"/>
    <addaction name="action_Pan"/>
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
    <addaction name="separator"/>
    <addaction name="action_SelectByRect"/>
    <addaction name="action_MoveVertex"/>
-   <addaction name="action_tbSaveGPSTrack"/>
   </widget>
   <action name="action_OpenGPXFile">
    <property name="icon">
@@ -188,6 +187,16 @@
    </property>
    <property name="text">
     <string>保存GPS轨迹</string>
+   </property>
+  </action>
+  <action name="action_Home">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/icons/GenericHome_B_32.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>回到初始状态</string>
    </property>
   </action>
  </widget>
