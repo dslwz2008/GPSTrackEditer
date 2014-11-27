@@ -30,7 +30,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle(_fromUtf8("GPS轨迹查询"))
+        self.setWindowTitle(_fromUtf8("GPS轨迹编辑"))
         # create map canvas
         self.canvas = QgsMapCanvas()
         self.canvas.show()
@@ -65,8 +65,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.connect(self.action_Exit, SIGNAL("triggered()"), self.exit)
         self.connect(self.action_SelectByRect, SIGNAL("triggered()"), self.select_by_rect)
         self.connect(self.action_MoveVertex, SIGNAL("triggered()"), self.move_vertex)
-        self.connect(self.action_SaveGPSTrack, SIGNAL("triggered()"), self.save_gps_file)
-        self.connect(self.action_tbSaveGPSTrack, SIGNAL("triggered()"), self.save_gps_file)
+        self.connect(self.action_Home, SIGNAL("triggered()"), self.home_view)
 
         #create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
@@ -147,12 +146,9 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.canvas.setMapTool(self.toolMoveVertex)
         self.toolMoveVertex.setEditLayer(self.track_layer)
 
-    def save_gps_file(self):
-        # filename = QFileDialog.getSaveFileName(self, _fromUtf8("请保存gpx文件"), "./data",
-        #                             _fromUtf8("GPS文件(*.gpx)"))
-        # if filename is None:
-        #     return
-        pass
+    def home_view(self):
+        self.canvas.setExtent(self.basemap_layer.extent())
+        self.canvas.refresh()
 
 
 def main(argv):

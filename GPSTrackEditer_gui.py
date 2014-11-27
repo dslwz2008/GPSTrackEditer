@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'GPSTrackEditer.ui'
 #
-# Created: Mon Nov 24 15:44:12 2014
+# Created: Thu Nov 27 17:37:46 2014
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -88,8 +88,12 @@ class Ui_MainWindow(object):
         self.action_SaveGPSTrack = QtGui.QAction(MainWindow)
         self.action_SaveGPSTrack.setIcon(icon6)
         self.action_SaveGPSTrack.setObjectName(_fromUtf8("action_SaveGPSTrack"))
+        self.action_Home = QtGui.QAction(MainWindow)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/GenericHome_B_32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.action_Home.setIcon(icon8)
+        self.action_Home.setObjectName(_fromUtf8("action_Home"))
         self.menu.addAction(self.action_OpenGPXFile)
-        self.menu.addAction(self.action_SaveGPSTrack)
         self.menu.addSeparator()
         self.menu.addAction(self.action_Exit)
         self.menu_2.addAction(self.action)
@@ -99,13 +103,13 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_2.menuAction())
         self.toolBar.addAction(self.action_tbOpenGPXFile)
         self.toolBar.addSeparator()
+        self.toolBar.addAction(self.action_Home)
         self.toolBar.addAction(self.action_Pan)
         self.toolBar.addAction(self.action_ZoomIn)
         self.toolBar.addAction(self.action_ZoomOut)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.action_SelectByRect)
         self.toolBar.addAction(self.action_MoveVertex)
-        self.toolBar.addAction(self.action_tbSaveGPSTrack)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -131,5 +135,6 @@ class Ui_MainWindow(object):
         self.action.setText(QtGui.QApplication.translate("MainWindow", "文档", None, QtGui.QApplication.UnicodeUTF8))
         self.action_3.setText(QtGui.QApplication.translate("MainWindow", "关于", None, QtGui.QApplication.UnicodeUTF8))
         self.action_SaveGPSTrack.setText(QtGui.QApplication.translate("MainWindow", "保存GPS轨迹", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_Home.setText(QtGui.QApplication.translate("MainWindow", "回到初始状态", None, QtGui.QApplication.UnicodeUTF8))
 
 import GPSTrackEditer_rc
