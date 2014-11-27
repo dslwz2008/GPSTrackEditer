@@ -8,7 +8,9 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
 from CustomMapTools import *
+from GPXTools import *
 import os
+import os.path
 import sys
 
 from GPSTrackEditer_gui import Ui_MainWindow
@@ -18,6 +20,11 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+
+def basename(filename):
+    name = filename.split('/')[-1]
+    parts = name.split('.')
+    return '-'.join(parts[0:len(parts) - 1])
 
 class TrackEditer(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -36,8 +43,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
         # open base image layer
         basemap_name = os.getcwd() + "/data/35school.tif"
-        fileinfo = QFileInfo(basemap_name)
-        baseName = fileinfo.baseName()
+        baseName = basename(basemap_name)
         self.basemap_layer = QgsRasterLayer(basemap_name, baseName)
         if not self.basemap_layer.isValid():
             QMessageBox.information(None, _fromUtf8("错误"), _fromUtf8("打开底图失败！"))
@@ -77,12 +83,18 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.pan()
 
     def open_gpx_file(self):
-        filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
+        gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
                                     _fromUtf8("GPS文件(*.gpx);;Shapefile(*.shp)"))
-        if filename is None:
+        if gpx_filename is None:
             return
 
-        # convert gpx to shapefile
+        gpx_filename = str(gpx_filename)
+        # convert gpx to shapefile first
+        gpx_loader = GPXLoader(gpx_filename)
+        baseName = basename(gpx_filename)
+        dirname = os.path.dirname(gpx_filename)
+        gpx_loader.gen_shapefile('%s/%s' % (dirname, baseName))
+        gpx_loader.gen_csv('%s/%s' % (dirname, baseName))
 
         #has already load track layer, delete first
         if self.track_layer is not None:
@@ -98,9 +110,8 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
             print(QgsMapLayerRegistry.instance().count())
 
         # load shapefile
-        fileinfo = QFileInfo(filename)
-        baseName = fileinfo.baseName()
-        self.track_layer = QgsVectorLayer(filename, baseName, "ogr")
+        shp_filename = '%s/%s.%s' % (dirname, baseName, 'shp')
+        self.track_layer = QgsVectorLayer(shp_filename, baseName, "ogr")
         if not self.track_layer.isValid():
             return
         QgsMapLayerRegistry.instance().addMapLayer(self.track_layer)
@@ -171,3 +182,4 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv)
+    #print(basename('d:/test/abc lll.123'))
