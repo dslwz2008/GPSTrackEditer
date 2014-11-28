@@ -12,6 +12,8 @@ from GPXTools import *
 import os
 import os.path
 import sys
+import imp
+import re
 
 from GPSTrackEditer_gui import Ui_MainWindow
 
@@ -20,6 +22,15 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+def main_is_frozen():
+    return (hasattr(sys, "frozen") or # new py2exe
+        hasattr(sys, "importers") or # old py2exe
+        imp.is_frozen("__main__")) # tools/freeze
+
+def get_main_dir():
+    if main_is_frozen():
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(sys.argv[0])
 
 def basename(filename):
     name = filename.split('/')[-1]
@@ -42,7 +53,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.setCentralWidget(self.canvas)
 
         # open base image layer
-        basemap_name = os.getcwd() + "/data/35school.tif"
+        basemap_name = get_main_dir() + "\\data\\35school.tif"
         baseName = basename(basemap_name)
         self.basemap_layer = QgsRasterLayer(basemap_name, baseName)
         if not self.basemap_layer.isValid():
@@ -83,7 +94,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
     def open_gpx_file(self):
         gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
-                                    _fromUtf8("GPS文件(*.gpx);;Shapefile(*.shp)"))
+                                    _fromUtf8("GPS文件(*.gpx)"))
         if gpx_filename is None:
             return
 
@@ -97,7 +108,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
         #has already load track layer, delete first
         if self.track_layer is not None:
-            trklyr_name = self.track_layer.name()
+            trklyr_name = '_'.join(re.findall('\d+', str(self.track_layer.name())))
             for name in QgsMapLayerRegistry.instance().mapLayers():
                 if name.indexOf(trklyr_name) != -1:#found
                     # remove from manager
@@ -178,4 +189,5 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv)
-    #print(basename('d:/test/abc lll.123'))
+    # print(basename('d:/test/abc lll.123'))
+    # print(get_main_dir())
