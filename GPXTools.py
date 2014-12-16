@@ -46,7 +46,7 @@ class GPXLoader(object):
 
 
     def gen_csv(self, csv_filename):
-        csvfile = open(csv_filename + '.csv', 'w')
+        csvfile = open(csv_filename + '.csv', 'wb') # 'wb' is important
         wrt = csv.writer(csvfile, delimiter=',')
         for p in self.points:
             wrt.writerow([p.longitude, p.latitude, p.elevation, p.time])
