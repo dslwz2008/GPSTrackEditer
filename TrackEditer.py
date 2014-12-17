@@ -22,20 +22,24 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+
 def main_is_frozen():
-    return (hasattr(sys, "frozen") or # new py2exe
-        hasattr(sys, "importers") or # old py2exe
-        imp.is_frozen("__main__")) # tools/freeze
+    return (hasattr(sys, "frozen") or  # new py2exe
+            hasattr(sys, "importers") or  # old py2exe
+            imp.is_frozen("__main__"))  # tools/freeze
+
 
 def get_main_dir():
     if main_is_frozen():
         return os.path.dirname(sys.executable)
     return os.path.dirname(sys.argv[0])
 
+
 def basename(filename):
     name = filename.split('/')[-1]
     parts = name.split('.')
     return '-'.join(parts[0:len(parts) - 1])
+
 
 class TrackEditer(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -60,11 +64,11 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
             QMessageBox.information(None, _fromUtf8("错误"), _fromUtf8("打开底图失败！"))
             return
 
-        #add layer
+        # add layer
         QgsMapLayerRegistry.instance().addMapLayer(self.basemap_layer)
         self.canvas.setExtent(self.basemap_layer.extent())
         # set up map canvas layer set
-        self.layer_set = [ QgsMapCanvasLayer(self.basemap_layer) ]
+        self.layer_set = [QgsMapCanvasLayer(self.basemap_layer)]
         self.canvas.setLayerSet(self.layer_set)
         self.track_layer = None
 
@@ -94,7 +98,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
     def open_gpx_file(self):
         gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
-                                    _fromUtf8("GPS文件(*.gpx)"))
+                                                   _fromUtf8("GPS文件(*.gpx)"))
         if gpx_filename is None:
             return
 
@@ -103,14 +107,15 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         gpx_loader = GPXLoader(gpx_filename)
         baseName = basename(gpx_filename)
         dirname = os.path.dirname(gpx_filename)
+        # generate shapefile first
         gpx_loader.gen_shapefile('%s/%s' % (dirname, baseName))
         gpx_loader.gen_csv('%s/%s' % (dirname, baseName))
 
-        #has already load track layer, delete first
+        # has already load track layer, delete first
         if self.track_layer is not None:
             trklyr_name = '_'.join(re.findall('\d+', str(self.track_layer.name())))
             for name in QgsMapLayerRegistry.instance().mapLayers():
-                if name.indexOf(trklyr_name) != -1:#found
+                if name.indexOf(trklyr_name) != -1:  #found
                     # remove from manager
                     QgsMapLayerRegistry.instance().removeMapLayer(name)
                     # remove from local layer set
@@ -151,7 +156,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
     def move_vertex(self):
         if self.track_layer is None or \
-            self.track_layer.selectedFeatureCount() == 0:
+                        self.track_layer.selectedFeatureCount() == 0:
             QMessageBox.information(self, _fromUtf8("注意"), _fromUtf8("请先选择矢量要素！"))
             return
         self.canvas.setMapTool(self.toolMoveVertex)
@@ -163,7 +168,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
 
 
 def main(argv):
-    #create Qt application
+    # create Qt application
     app = QApplication(argv)
 
     # get prefix path from env variable
