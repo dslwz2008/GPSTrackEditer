@@ -35,12 +35,6 @@ def get_main_dir():
     return os.path.dirname(sys.argv[0])
 
 
-def basename(filename):
-    name = filename.split('/')[-1]
-    parts = name.split('.')
-    return '-'.join(parts[0:len(parts) - 1])
-
-
 class TrackEditer(QMainWindow, Ui_MainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -71,6 +65,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.layer_set = [QgsMapCanvasLayer(self.basemap_layer)]
         self.canvas.setLayerSet(self.layer_set)
         self.track_layer = None
+        self.gpx_loader = None
 
         self.connect(self.action_ZoomIn, SIGNAL("triggered()"), self.zoom_in)
         self.connect(self.action_ZoomOut, SIGNAL("triggered()"), self.zoom_out)
@@ -81,8 +76,10 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.connect(self.action_SelectByRect, SIGNAL("triggered()"), self.select_by_rect)
         self.connect(self.action_MoveVertex, SIGNAL("triggered()"), self.move_vertex)
         self.connect(self.action_Home, SIGNAL("triggered()"), self.home_view)
+        # after track layer has been edited, update csv file
+        self.connect(self.canvas, SIGNAL('mapCanvasRefreshed()'), self.update_csv)
 
-        #create maptools
+        # create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
         self.toolPan.setAction(self.action_Pan)
         self.toolZoomIn = QgsMapToolZoom(self.canvas, False)
@@ -99,23 +96,23 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
     def open_gpx_file(self):
         gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
                                                    _fromUtf8("GPS文件(*.gpx)"))
-        if gpx_filename is None:
+        if gpx_filename == '':
             return
 
         gpx_filename = str(gpx_filename)
         # convert gpx to shapefile first
-        gpx_loader = GPXLoader(gpx_filename)
+        self.gpx_loader = GPXLoader(gpx_filename)
         baseName = basename(gpx_filename)
         dirname = os.path.dirname(gpx_filename)
         # generate shapefile first
-        gpx_loader.gen_shapefile('%s/%s' % (dirname, baseName))
-        gpx_loader.gen_csv('%s/%s' % (dirname, baseName))
+        self.gpx_loader.gen_shapefile()
+        self.gpx_loader.gen_csv()
 
         # has already load track layer, delete first
         if self.track_layer is not None:
             trklyr_name = '_'.join(re.findall('\d+', str(self.track_layer.name())))
             for name in QgsMapLayerRegistry.instance().mapLayers():
-                if name.indexOf(trklyr_name) != -1:  #found
+                if name.indexOf(trklyr_name) != -1:  # found
                     # remove from manager
                     QgsMapLayerRegistry.instance().removeMapLayer(name)
                     # remove from local layer set
@@ -134,7 +131,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.canvas.setLayerSet(self.layer_set)
         self.canvas.setExtent(self.track_layer.extent())
         self.toolRectSelection.setSelectLayer(self.track_layer)
-        #maps = QgsMapLayerRegistry.instance().mapLayers()
+        # maps = QgsMapLayerRegistry.instance().mapLayers()
         #print(maps)
         print(QgsMapLayerRegistry.instance().count())
         print(self.track_layer.dataProvider().capabilitiesString())
@@ -166,6 +163,18 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.canvas.setExtent(self.basemap_layer.extent())
         self.canvas.refresh()
 
+    def update_csv(self):
+        if self.canvas.mapTool() == self.toolMoveVertex and \
+                        self.track_layer is not None:
+            points = []
+            # return all features
+            fit = self.track_layer.getFeatures(QgsFeatureRequest())
+            fet = QgsFeature()
+            while fit.nextFeature(fet):
+                points.append(fet.geometry().asPoint())
+                #print(pnt.x(), pnt.y())
+            self.gpx_loader.update_csv(points)
+
 
 def main(argv):
     # create Qt application
@@ -180,7 +189,7 @@ def main(argv):
     QgsApplication.initQgis()
 
     print(QgsApplication.showSettings())
-    #create main window
+    # create main window
     wnd = TrackEditer()
     wnd.move(100, 100)
     wnd.show()

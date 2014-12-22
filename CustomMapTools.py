@@ -73,8 +73,8 @@ class RectSelectionMapTool(QgsMapToolEmitPoint):
             print("Rectangle:", r.xMinimum(), r.yMinimum(), r.xMaximum(), r.yMaximum())
             if self.select_layer is not None:
                 self.select_layer.select(r, True)
-                for f in self.select_layer.selectedFeatures():
-                    print(f)
+                # for f in self.select_layer.selectedFeatures():
+                #     print(f)
         self.reset()
 
     def canvasMoveEvent(self, e):
