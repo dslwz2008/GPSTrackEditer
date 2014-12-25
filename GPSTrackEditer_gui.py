@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'GPSTrackEditer.ui'
 #
-# Created: Thu Nov 27 17:37:46 2014
+# Created: Thu Dec 25 16:05:26 2014
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -81,10 +81,10 @@ class Ui_MainWindow(object):
         icon7.addPixmap(QtGui.QPixmap(_fromUtf8(":/icons/icons/SelectionSelectTool32.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.action_SelectByRect.setIcon(icon7)
         self.action_SelectByRect.setObjectName(_fromUtf8("action_SelectByRect"))
-        self.action = QtGui.QAction(MainWindow)
-        self.action.setObjectName(_fromUtf8("action"))
-        self.action_3 = QtGui.QAction(MainWindow)
-        self.action_3.setObjectName(_fromUtf8("action_3"))
+        self.action_doc = QtGui.QAction(MainWindow)
+        self.action_doc.setObjectName(_fromUtf8("action_doc"))
+        self.action_about = QtGui.QAction(MainWindow)
+        self.action_about.setObjectName(_fromUtf8("action_about"))
         self.action_SaveGPSTrack = QtGui.QAction(MainWindow)
         self.action_SaveGPSTrack.setIcon(icon6)
         self.action_SaveGPSTrack.setObjectName(_fromUtf8("action_SaveGPSTrack"))
@@ -96,9 +96,9 @@ class Ui_MainWindow(object):
         self.menu.addAction(self.action_OpenGPXFile)
         self.menu.addSeparator()
         self.menu.addAction(self.action_Exit)
-        self.menu_2.addAction(self.action)
+        self.menu_2.addAction(self.action_doc)
         self.menu_2.addSeparator()
-        self.menu_2.addAction(self.action_3)
+        self.menu_2.addAction(self.action_about)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.toolBar.addAction(self.action_tbOpenGPXFile)
@@ -132,8 +132,8 @@ class Ui_MainWindow(object):
         self.action_MoveVertex.setText(QtGui.QApplication.translate("MainWindow", "开始编辑", None, QtGui.QApplication.UnicodeUTF8))
         self.action_tbSaveGPSTrack.setText(QtGui.QApplication.translate("MainWindow", "保存编辑", None, QtGui.QApplication.UnicodeUTF8))
         self.action_SelectByRect.setText(QtGui.QApplication.translate("MainWindow", "选择", None, QtGui.QApplication.UnicodeUTF8))
-        self.action.setText(QtGui.QApplication.translate("MainWindow", "文档", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_3.setText(QtGui.QApplication.translate("MainWindow", "关于", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_doc.setText(QtGui.QApplication.translate("MainWindow", "文档", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_about.setText(QtGui.QApplication.translate("MainWindow", "关于", None, QtGui.QApplication.UnicodeUTF8))
         self.action_SaveGPSTrack.setText(QtGui.QApplication.translate("MainWindow", "保存GPS轨迹", None, QtGui.QApplication.UnicodeUTF8))
         self.action_Home.setText(QtGui.QApplication.translate("MainWindow", "回到初始状态", None, QtGui.QApplication.UnicodeUTF8))
 

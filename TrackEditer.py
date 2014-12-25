@@ -39,7 +39,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle(_fromUtf8("GPS轨迹编辑"))
+        self.setWindowTitle(_fromUtf8(u"GPS轨迹编辑"))
         # create map canvas
         self.canvas = QgsMapCanvas()
         self.canvas.show()
@@ -55,7 +55,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         baseName = basename(basemap_name)
         self.basemap_layer = QgsRasterLayer(basemap_name, baseName)
         if not self.basemap_layer.isValid():
-            QMessageBox.information(None, _fromUtf8("错误"), _fromUtf8("打开底图失败！"))
+            QMessageBox.information(None, _fromUtf8(u"错误"), _fromUtf8(u"打开底图失败！"))
             return
 
         # add layer
@@ -78,6 +78,8 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.connect(self.action_Home, SIGNAL("triggered()"), self.home_view)
         # after track layer has been edited, update csv file
         self.connect(self.canvas, SIGNAL('mapCanvasRefreshed()'), self.update_csv)
+        self.connect(self.action_doc, SIGNAL("triggered()"), self.open_doc)
+        self.connect(self.action_about, SIGNAL("triggered()"), self.about)
 
         # create maptools
         self.toolPan = QgsMapToolPan(self.canvas)
@@ -94,8 +96,8 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
         self.pan()
 
     def open_gpx_file(self):
-        gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8("请选择gpx文件"), "./data",
-                                                   _fromUtf8("GPS文件(*.gpx)"))
+        gpx_filename = QFileDialog.getOpenFileName(self, _fromUtf8(u"请选择gpx文件"), "./data",
+                                                   _fromUtf8(u"GPS文件(*.gpx)"))
         if gpx_filename == '':
             return
 
@@ -154,7 +156,7 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
     def move_vertex(self):
         if self.track_layer is None or \
                         self.track_layer.selectedFeatureCount() == 0:
-            QMessageBox.information(self, _fromUtf8("注意"), _fromUtf8("请先选择矢量要素！"))
+            QMessageBox.information(self, _fromUtf8(u"注意"), _fromUtf8(u"请先选择矢量要素！"))
             return
         self.canvas.setMapTool(self.toolMoveVertex)
         self.toolMoveVertex.setEditLayer(self.track_layer)
@@ -162,6 +164,14 @@ class TrackEditer(QMainWindow, Ui_MainWindow):
     def home_view(self):
         self.canvas.setExtent(self.basemap_layer.extent())
         self.canvas.refresh()
+
+    def open_doc(self):
+        import os
+        os.startfile(u"GPS室外定位轨迹编辑系统使用说明.html")
+
+    def about(self):
+        QMessageBox.information(self, _fromUtf8(u"关于"),
+                                _fromUtf8(u"GPSTrackEditer 1.0 版权所有"))
 
     def update_csv(self):
         if self.canvas.mapTool() == self.toolMoveVertex and \
@@ -183,7 +193,7 @@ def main(argv):
     # get prefix path from env variable
     prefix_path = os.getenv("QGIS_PREFIX")
     if prefix_path is None:
-        QMessageBox.information(None, _fromUtf8("错误！"), _fromUtf8("请先设置QGIS_PREFIX变量"))
+        QMessageBox.information(None, _fromUtf8(u"错误！"), _fromUtf8(u"请先设置QGIS_PREFIX变量"))
         return
     QgsApplication.setPrefixPath(prefix_path, True)
     QgsApplication.initQgis()
